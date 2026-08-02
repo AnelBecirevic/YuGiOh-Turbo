@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Yu-Gi-Oh! Turbo - Login</title>
+
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <h1>Yu-Gi-Oh! Turbo</h1>
+
+    <form>
+
+        <input
+                type="text"
+                placeholder="Username"
+                name="username">
+
+        <input
+                type="password"
+                placeholder="Password"
+                name="password">
+
+        <!-- Placeholder until login functionality exists -->
+        <a href="/menu" class="button">
+            Login
+        </a>
+
+    </form>
+
+    <p>
+        Don't have an account?
+    </p>
+
+    <a href="/create-account">
+        Create Account
+    </a>
+
+</div>
+
+</body>
+</html>

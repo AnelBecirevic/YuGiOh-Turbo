@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Change Username</title>
+
+  <link rel="stylesheet" th:href="@{/css/change-username.css}">
+</head>
+
+<body>
+
+<div class="change-container">
+
+  <h1>Change Username</h1>
+
+  <input
+          type="text"
+          placeholder="Current Username">
+
+  <input
+          type="text"
+          placeholder="New Username">
+
+  <a href="/account" class="button">
+    Confirm
+  </a>
+
+  <a href="/account" class="back-link">
+    ← Back
+  </a>
+
+</div>
+
+</body>
+</html>
