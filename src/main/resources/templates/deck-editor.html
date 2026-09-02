@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Deck Editor - Yu-Gi-Oh! Turbo</title>
+
+    <link rel="stylesheet" th:href="@{/css/deck-editor.css}">
+</head>
+
+<body>
+
+<div class="page">
+
+    <header>
+
+        <div>
+            <h1>Deck Editor</h1>
+
+            <p>
+                Deck Size:
+                <strong th:text="${deckSize}">40</strong>
+                / 40
+            </p>
+        </div>
+
+        <a href="/menu" class="back-button">
+            Back to Menu
+        </a>
+
+    </header>
+
+
+    <div class="editor">
+
+        <!-- ======================== -->
+        <!-- TRUNK -->
+        <!-- ======================== -->
+
+        <section class="panel">
+
+            <h2>Trunk</h2>
+
+            <p class="panel-description">
+                Cards you own
+            </p>
+
+            <div class="card-list">
+
+                <div
+                        class="card-entry"
+                        th:each="card : ${trunkCards}">
+
+                    <img
+                            th:src="${'/' + card.imagePath}"
+                            th:alt="${card.name}">
+
+                    <div class="card-information">
+
+                        <h3 th:text="${card.name}">
+                            Card Name
+                        </h3>
+
+                        <p>
+                            Owned:
+                            <strong th:text="${card.quantity}">
+                                0
+                            </strong>
+                        </p>
+
+                        <p>
+                            ATK
+                            <span th:text="${card.attack}"></span>
+
+                            /
+
+                            DEF
+                            <span th:text="${card.defense}"></span>
+                        </p>
+
+                        <form
+                                method="post"
+                                action="/deck-editor/add">
+
+                            <input
+                                    type="hidden"
+                                    name="cardId"
+                                    th:value="${card.cardId}">
+
+                            <button type="submit">
+                                + Add
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================== -->
+        <!-- CURRENT DECK -->
+        <!-- ======================== -->
+
+        <section class="panel">
+
+            <h2>Starter Deck</h2>
+
+            <p class="panel-description">
+                Current deck contents
+            </p>
+
+            <div class="card-list">
+
+                <div
+                        class="card-entry"
+                        th:each="card : ${deckCards}">
+
+                    <img
+                            th:src="${'/' + card.imagePath}"
+                            th:alt="${card.name}">
+
+                    <div class="card-information">
+
+                        <h3 th:text="${card.name}">
+                            Card Name
+                        </h3>
+
+                        <p>
+                            In Deck:
+                            <strong th:text="${card.quantity}">
+                                0
+                            </strong>
+                        </p>
+
+                        <p>
+                            ATK
+                            <span th:text="${card.attack}"></span>
+
+                            /
+
+                            DEF
+                            <span th:text="${card.defense}"></span>
+                        </p>
+
+                        <form
+                                method="post"
+                                action="/deck-editor/remove">
+
+                            <input
+                                    type="hidden"
+                                    name="cardId"
+                                    th:value="${card.cardId}">
+
+                            <button
+                                    type="submit"
+                                    class="remove-button">
+                                − Remove
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

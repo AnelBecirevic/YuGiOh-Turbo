@@ -70,4 +70,24 @@ public class TrunkRepository {
                 accountId
         );
     }
+
+    public Integer getCardQuantity(
+            Integer accountId,
+            Integer cardId
+    ) {
+
+        return jdbcTemplate.query(
+                """
+                SELECT quantity
+                FROM trunk
+                WHERE account_id = ?
+                AND card_id = ?
+                """,
+                rs -> rs.next()
+                        ? rs.getInt("quantity")
+                        : 0,
+                accountId,
+                cardId
+        );
+    }
 }

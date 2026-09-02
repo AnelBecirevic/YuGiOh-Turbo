@@ -16,11 +16,11 @@ body {
 
 }
 
-.change-container {
+.delete-container {
 
     background: white;
 
-    width: 420px;
+    width: 450px;
 
     padding: 40px;
 
@@ -32,39 +32,29 @@ body {
 
     align-items: center;
 
-    box-shadow: 0px 0px 20px rgba(0,0,0,.35);
+    text-align: center;
+
+    box-shadow: 0 0 20px rgba(0,0,0,.35);
 
 }
 
 h1 {
 
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 
 }
 
-input {
-
-    width: 250px;
-
-    padding: 12px;
-
-    margin: 10px;
-
-    font-size: 16px;
-
-}
-
-.button {
+.delete-button {
 
     width: 220px;
 
     text-align: center;
 
-    margin-top: 20px;
+    margin-top: 25px;
 
     padding: 12px;
 
-    background: #444;
+    background: darkred;
 
     color: white;
 
@@ -74,9 +64,9 @@ input {
 
 }
 
-.button:hover {
+.delete-button:hover {
 
-    background: #666;
+    background: red;
 
 }
 
