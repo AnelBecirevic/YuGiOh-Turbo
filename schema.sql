@@ -391,5 +391,25 @@ VALUES
 
 
 -- ============================================================
+-- RESET IDENTITY COUNTERS AFTER DUMMY DATA
+-- ============================================================
+
+ALTER TABLE account
+    ALTER COLUMN account_id RESTART WITH 3;
+
+ALTER TABLE card
+    ALTER COLUMN card_id RESTART WITH 6;
+
+ALTER TABLE deck
+    ALTER COLUMN deck_id RESTART WITH 2;
+
+ALTER TABLE trunk
+    ALTER COLUMN trunk_id RESTART WITH 6;
+
+ALTER TABLE deckcard
+    ALTER COLUMN deckcard_id RESTART WITH 4;
+
+
+-- ============================================================
 -- END OF SCHEMA
 -- ============================================================
