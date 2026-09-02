@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+
+  <title>Trunk - Yu-Gi-Oh! Turbo</title>
+
+  <link rel="stylesheet" th:href="@{/css/trunk.css}">
+</head>
+
+<body>
+
+<div class="page">
+
+  <header>
+    <div>
+      <h1>Trunk</h1>
+
+      <p>
+        Cards owned:
+        <strong th:text="${totalCards}">0</strong>
+      </p>
+    </div>
+
+    <a href="/menu" class="back-button">
+      Back to Menu
+    </a>
+  </header>
+
+  <main class="card-grid">
+
+    <div
+            class="card-entry"
+            th:each="card : ${cards}">
+
+      <img
+              th:src="${'/' + card.imagePath}"
+              th:alt="${card.name}">
+
+      <div class="card-information">
+
+        <h2 th:text="${card.name}">
+          Card Name
+        </h2>
+
+        <p class="quantity">
+          Owned:
+          <strong th:text="${card.quantity}">
+            1
+          </strong>
+        </p>
+
+        <p>
+          <strong>Attribute:</strong>
+          <span th:text="${card.attribute}"></span>
+        </p>
+
+        <p>
+          <strong>Type:</strong>
+          <span th:text="${card.monsterType}"></span>
+        </p>
+
+        <p>
+          <strong>Level:</strong>
+          <span th:text="${card.level}"></span>
+        </p>
+
+        <p>
+          <strong>ATK:</strong>
+          <span th:text="${card.attack}"></span>
+
+          /
+
+          <strong>DEF:</strong>
+          <span th:text="${card.defense}"></span>
+        </p>
+
+        <p
+                class="description"
+                th:text="${card.description}">
+        </p>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+
+</html>
