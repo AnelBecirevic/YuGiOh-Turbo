@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
-  <title>Delete Account</title>
+  <title>Delete Account - Yu-Gi-Oh! Turbo</title>
 
   <link rel="stylesheet" th:href="@{/css/delete-account.css}">
 </head>
@@ -15,18 +15,16 @@
   <h1>Delete Account</h1>
 
   <p>
-    Are you sure you want to delete your account?
+    Are you sure you want to permanently delete your account?
   </p>
 
-  <p>
-    This action cannot be undone.
-  </p>
+  <form action="/delete-account" method="post">
+    <button type="submit">
+      Delete Account
+    </button>
+  </form>
 
-  <a href="/" class="delete-button">
-    Delete Account
-  </a>
-
-  <a href="/account" class="back-link">
+  <a href="/account">
     Cancel
   </a>
 

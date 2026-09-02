@@ -1,5 +1,6 @@
 package com.yugiohTurbo.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -17,23 +18,12 @@ public class HomeController {
     }
 
     @GetMapping("/menu")
-    public String menuPage() {
+    public String menuPage(HttpSession session) {
+
+        if (session.getAttribute("accountId") == null) {
+            return "redirect:/";
+        }
+
         return "menu";
     }
-
-    @GetMapping("/account")
-    public String accountPage() {
-        return "account";
-    }
-
-    @GetMapping("/change-username")
-    public String changeUsernamePage() {
-        return "change-username";
-    }
-
-    @GetMapping("/delete-account")
-    public String deleteAccountPage() {
-        return "delete-account";
-    }
-
 }

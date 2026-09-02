@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
-  <title>Account</title>
+  <title>Account - Yu-Gi-Oh! Turbo</title>
 
   <link rel="stylesheet" th:href="@{/css/account.css}">
 </head>
@@ -14,20 +14,27 @@
 
   <h1>Account</h1>
 
+  <p>
+    Logged in as:
+    <strong th:text="${username}">Username</strong>
+  </p>
+
   <a href="/change-username" class="button">
     Change Username
   </a>
 
-  <a href="/delete-account" class="button">
+  <a href="/delete-account" class="button danger">
     Delete Account
   </a>
 
-  <a href="/" class="button">
-    Sign Out
-  </a>
+  <form action="/logout" method="post">
+    <button type="submit" class="button">
+      Logout
+    </button>
+  </form>
 
-  <a href="/menu" class="back-link">
-    ← Back
+  <a href="/menu">
+    Back to Menu
   </a>
 
 </div>

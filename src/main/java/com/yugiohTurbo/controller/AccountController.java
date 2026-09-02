@@ -5,6 +5,7 @@ import com.yugiohTurbo.service.AccountService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -66,5 +67,104 @@ public class AccountController {
         session.setAttribute("username", account.username());
 
         return "redirect:/menu";
+    }
+
+    @GetMapping("/account")
+    public String accountPage(
+            HttpSession session,
+            Model model
+    ) {
+
+        Integer accountId = (Integer) session.getAttribute("accountId");
+
+        if (accountId == null) {
+            return "redirect:/";
+        }
+
+        Account account = accountService.getAccount(accountId);
+
+        if (account == null) {
+            session.invalidate();
+            return "redirect:/";
+        }
+
+        model.addAttribute("username", account.username());
+
+        return "account";
+    }
+
+    @GetMapping("/change-username")
+    public String changeUsernamePage(HttpSession session) {
+
+        if (session.getAttribute("accountId") == null) {
+            return "redirect:/";
+        }
+
+        return "change-username";
+    }
+
+    @PostMapping("/change-username")
+    public String changeUsername(
+            @RequestParam String newUsername,
+            HttpSession session,
+            Model model
+    ) {
+
+        Integer accountId = (Integer) session.getAttribute("accountId");
+
+        if (accountId == null) {
+            return "redirect:/";
+        }
+
+        boolean changed = accountService.changeUsername(
+                accountId,
+                newUsername
+        );
+
+        if (!changed) {
+            model.addAttribute(
+                    "error",
+                    "Username is invalid or already taken."
+            );
+
+            return "change-username";
+        }
+
+        session.setAttribute("username", newUsername.trim());
+
+        return "redirect:/account";
+    }
+
+    @GetMapping("/delete-account")
+    public String deleteAccountPage(HttpSession session) {
+
+        if (session.getAttribute("accountId") == null) {
+            return "redirect:/";
+        }
+
+        return "delete-account";
+    }
+
+    @PostMapping("/delete-account")
+    public String deleteAccount(HttpSession session) {
+
+        Integer accountId = (Integer) session.getAttribute("accountId");
+
+        if (accountId == null) {
+            return "redirect:/";
+        }
+
+        accountService.deleteAccount(accountId);
+
+        session.invalidate();
+
+        return "redirect:/";
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+
+        return "redirect:/";
     }
 }

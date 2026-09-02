@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
-  <title>Change Username</title>
+  <title>Change Username - Yu-Gi-Oh! Turbo</title>
 
   <link rel="stylesheet" th:href="@{/css/change-username.css}">
 </head>
@@ -14,20 +14,31 @@
 
   <h1>Change Username</h1>
 
-  <input
-          type="text"
-          placeholder="Current Username">
+  <form action="/change-username" method="post">
 
-  <input
-          type="text"
-          placeholder="New Username">
+    <label for="newUsername">New Username</label>
 
-  <a href="/account" class="button">
-    Confirm
-  </a>
+    <input
+            id="newUsername"
+            type="text"
+            name="newUsername"
+            placeholder="New Username"
+            required>
 
-  <a href="/account" class="back-link">
-    ← Back
+    <button type="submit">
+      Change Username
+    </button>
+
+  </form>
+
+  <p
+          th:if="${error}"
+          th:text="${error}"
+          class="error">
+  </p>
+
+  <a href="/account">
+    Back to Account
   </a>
 
 </div>

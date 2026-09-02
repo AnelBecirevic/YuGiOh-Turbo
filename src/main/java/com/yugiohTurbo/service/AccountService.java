@@ -59,4 +59,29 @@ public class AccountService {
 
         return account;
     }
+
+    public Account getAccount(Integer accountId) {
+        return accountRepository.findById(accountId);
+    }
+
+    public boolean changeUsername(Integer accountId, String newUsername) {
+
+        if (newUsername == null || newUsername.isBlank()) {
+            return false;
+        }
+
+        newUsername = newUsername.trim();
+
+        if (accountRepository.existsByUsername(newUsername)) {
+            return false;
+        }
+
+        accountRepository.updateUsername(accountId, newUsername);
+
+        return true;
+    }
+
+    public void deleteAccount(Integer accountId) {
+        accountRepository.deleteById(accountId);
+    }
 }
