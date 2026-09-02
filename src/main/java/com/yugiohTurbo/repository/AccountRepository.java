@@ -14,6 +14,7 @@ public class AccountRepository {
     }
 
     public boolean existsByUsername(String username) {
+
         Integer count = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM account WHERE username = ?",
                 Integer.class,
@@ -23,18 +24,30 @@ public class AccountRepository {
         return count != null && count > 0;
     }
 
-    public void create(String username, String passwordHash) {
-        jdbcTemplate.update(
-                "INSERT INTO account (username, password_hash) VALUES (?, ?)",
+    public Integer create(String username, String passwordHash) {
+
+        return jdbcTemplate.queryForObject(
+                """
+                INSERT INTO account (username, password_hash)
+                VALUES (?, ?)
+                RETURNING account_id
+                """,
+                Integer.class,
                 username,
                 passwordHash
         );
     }
 
     public Account findByUsername(String username) {
+
         return jdbcTemplate.query(
-                "SELECT account_id, username, password_hash FROM account WHERE username = ?",
+                """
+                SELECT account_id, username, password_hash
+                FROM account
+                WHERE username = ?
+                """,
                 rs -> {
+
                     if (rs.next()) {
                         return new Account(
                                 rs.getInt("account_id"),
@@ -50,9 +63,15 @@ public class AccountRepository {
     }
 
     public Account findById(Integer accountId) {
+
         return jdbcTemplate.query(
-                "SELECT account_id, username, password_hash FROM account WHERE account_id = ?",
+                """
+                SELECT account_id, username, password_hash
+                FROM account
+                WHERE account_id = ?
+                """,
                 rs -> {
+
                     if (rs.next()) {
                         return new Account(
                                 rs.getInt("account_id"),
@@ -68,14 +87,20 @@ public class AccountRepository {
     }
 
     public void updateUsername(Integer accountId, String newUsername) {
+
         jdbcTemplate.update(
-                "UPDATE account SET username = ? WHERE account_id = ?",
+                """
+                UPDATE account
+                SET username = ?
+                WHERE account_id = ?
+                """,
                 newUsername,
                 accountId
         );
     }
 
     public void deleteById(Integer accountId) {
+
         jdbcTemplate.update(
                 "DELETE FROM account WHERE account_id = ?",
                 accountId

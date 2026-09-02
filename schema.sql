@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS Account;
 
 -- ============================================================
 -- ACCOUNT
--- Stores registered user accounts.
+-- Stores registered player accounts.
 -- ============================================================
 
 CREATE TABLE Account (
@@ -43,15 +43,13 @@ CREATE TABLE Account (
 -- ============================================================
 -- CARD
 -- Stores information shared by every card type.
--- card_type determines whether the card is a
--- MONSTER, SPELL or TRAP.
 -- ============================================================
 
 CREATE TABLE Card (
 
                       card_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
-                      name VARCHAR(100) NOT NULL,
+                      name VARCHAR(100) NOT NULL UNIQUE,
 
                       card_type VARCHAR(20) NOT NULL,
 
@@ -67,14 +65,7 @@ CREATE TABLE Card (
 
 -- ============================================================
 -- MONSTER CARD
--- Stores information specific to monster cards.
---
--- card_id is both:
---   Primary Key
---   Foreign Key -> Card
---
--- This creates a one-to-one relationship between
--- a Card and its MonsterCard information.
+-- Stores properties specific to Monster Cards.
 -- ============================================================
 
 CREATE TABLE MonsterCard (
@@ -110,15 +101,7 @@ CREATE TABLE MonsterCard (
 
 -- ============================================================
 -- SPELL CARD
--- Stores information specific to Spell Cards.
---
--- Examples of spell_type later could include:
--- NORMAL
--- QUICK_PLAY
--- CONTINUOUS
--- EQUIP
--- FIELD
--- RITUAL
+-- Reserved for future Spell Card functionality.
 -- ============================================================
 
 CREATE TABLE SpellCard (
@@ -137,12 +120,7 @@ CREATE TABLE SpellCard (
 
 -- ============================================================
 -- TRAP CARD
--- Stores information specific to Trap Cards.
---
--- Examples of trap_type later could include:
--- NORMAL
--- CONTINUOUS
--- COUNTER
+-- Reserved for future Trap Card functionality.
 -- ============================================================
 
 CREATE TABLE TrapCard (
@@ -161,10 +139,8 @@ CREATE TABLE TrapCard (
 
 -- ============================================================
 -- DECK
--- Stores information about a player's decks.
---
--- The actual cards inside the deck are stored
--- separately in DeckCard.
+-- Stores player-owned decks.
+-- The contents are stored separately in DeckCard.
 -- ============================================================
 
 CREATE TABLE Deck (
@@ -185,10 +161,9 @@ CREATE TABLE Deck (
 
 -- ============================================================
 -- TRUNK
--- Represents the player's entire card collection.
---
--- A player should only have one row for each card.
--- quantity records how many copies they own.
+-- Represents all cards owned by a player.
+-- One row represents one card type owned by one account.
+-- quantity stores the number of copies owned.
 -- ============================================================
 
 CREATE TABLE Trunk (
@@ -221,11 +196,7 @@ CREATE TABLE Trunk (
 
 -- ============================================================
 -- DECK CARD
--- Represents the contents of a deck.
---
--- A deck only has one row per card.
--- quantity records how many copies of that card
--- are currently inside the deck.
+-- Represents the cards contained inside a deck.
 -- ============================================================
 
 CREATE TABLE DeckCard (
@@ -257,23 +228,8 @@ CREATE TABLE DeckCard (
 
 
 -- ============================================================
--- DUMMY ACCOUNT DATA
---
--- These passwords are only placeholder test data.
--- Real accounts should contain properly hashed passwords.
--- ============================================================
-
-INSERT INTO Account
-(account_id, username, password_hash)
-    OVERRIDING SYSTEM VALUE
-VALUES
-    (1, 'Yugi', 'password123'),
-    (2, 'Kaiba', 'password123');
-
-
--- ============================================================
--- DUMMY CARD DATA
--- Shared card information.
+-- CARD CATALOGUE
+-- Shared information for the currently implemented cards.
 -- ============================================================
 
 INSERT INTO Card
@@ -281,133 +237,290 @@ INSERT INTO Card
     OVERRIDING SYSTEM VALUE
 VALUES
 
-    (
-        1,
-        'Dark Magician',
-        'MONSTER',
-        'The ultimate wizard in terms of attack and defense.',
-        'images/dark_magician.png'
-    ),
+-- ============================================================
+-- YUGI / PLAYER CARDS
+-- ============================================================
 
-    (
-        2,
-        'Blue-Eyes White Dragon',
-        'MONSTER',
-        'This legendary dragon is a powerful engine of destruction.',
-        'images/blue_eyes_white_dragon.png'
-    ),
+(
+    1,
+    'Dark Magician',
+    'MONSTER',
+    'An ultimate wizard possessing exceptional attack and defense.',
+    'images/dark_magician.png'
+),
 
-    (
-        3,
-        'Celtic Guardian',
-        'MONSTER',
-        'An elf who learned to wield a sword.',
-        'images/celtic_guardian.png'
-    ),
+(
+    2,
+    'Gaia the Fierce Knight',
+    'MONSTER',
+    'A mounted knight who charges into battle with tremendous speed and power.',
+    'images/gaia_the_fierce_knight.png'
+),
 
-    (
-        4,
-        'Battle Ox',
-        'MONSTER',
-        'A monster with tremendous attack power.',
-        'images/battle_ox.png'
-    ),
+(
+    3,
+    'Summoned Skull',
+    'MONSTER',
+    'A fiend that commands dark powers and possesses tremendous strength.',
+    'images/summoned_skull.png'
+),
 
-    (
-        5,
-        'Hitotsu-Me Giant',
-        'MONSTER',
-        'A one-eyed giant that attacks with brute strength.',
-        'images/hitotsu_me_giant.png'
-    );
+(
+    4,
+    'Curse of Dragon',
+    'MONSTER',
+    'A wicked dragon that draws upon dark forces to unleash powerful attacks.',
+    'images/curse_of_dragon.png'
+),
+
+(
+    5,
+    'Celtic Guardian',
+    'MONSTER',
+    'A sword-wielding elf known for confusing opponents with swift attacks.',
+    'images/celtic_guardian.png'
+),
+
+(
+    6,
+    'Feral Imp',
+    'MONSTER',
+    'A mischievous fiend that lurks in darkness and waits for a chance to strike.',
+    'images/feral_imp.png'
+),
+
+(
+    7,
+    'Giant Soldier of Stone',
+    'MONSTER',
+    'A gigantic warrior formed from stone whose strength can shake the earth.',
+    'images/giant_soldier_of_stone.png'
+),
+
+(
+    8,
+    'Mystical Elf',
+    'MONSTER',
+    'A gentle elf whose magical power provides her with exceptional defense.',
+    'images/mystical_elf.png'
+),
+
+(
+    9,
+    'Beaver Warrior',
+    'MONSTER',
+    'A skilled forest warrior whose small size hides surprising fighting ability.',
+    'images/beaver_warrior.png'
+),
+
+(
+    10,
+    'Blackland Fire Dragon',
+    'MONSTER',
+    'A dragon that dwells in darkness and attacks its enemies with fierce power.',
+    'images/blackland_fire_dragon.png'
+),
+
+(
+    11,
+    'Neo the Magic Swordsman',
+    'MONSTER',
+    'A dimensional traveler skilled in sorcery, swordsmanship and martial arts.',
+    'images/neo_the_magic_swordsman.png'
+),
+
+(
+    12,
+    'Silver Fang',
+    'MONSTER',
+    'A beautiful silver-furred wolf that becomes vicious when drawn into battle.',
+    'images/silver_fang.png'
+),
+
+(
+    13,
+    'Gazelle the King of Mythical Beasts',
+    'MONSTER',
+    'A mythical beast whose incredible speed makes it difficult for enemies to follow.',
+    'images/gazelle_the_king_of_mythical_beasts.png'
+),
+
+(
+    14,
+    'Mammoth Graveyard',
+    'MONSTER',
+    'A mammoth that fiercely protects the resting place of its ancient herd.',
+    'images/mammoth_graveyard.png'
+),
 
 
 -- ============================================================
--- DUMMY MONSTER CARD DATA
--- Monster-specific properties.
+-- KAIBA / OPPONENT CARDS
+-- ============================================================
+
+(
+    15,
+    'Blue-Eyes White Dragon',
+    'MONSTER',
+    'A legendary dragon possessing overwhelming power and incredible destructive force.',
+    'images/blue-eyes_white_dragon.png'
+),
+
+(
+    16,
+    'Judge Man',
+    'MONSTER',
+    'A powerful warrior who swings a massive club and refuses to surrender.',
+    'images/judge_man.png'
+),
+
+(
+    17,
+    'Swordstalker',
+    'MONSTER',
+    'A fearsome warrior formed from the vengeful spirits of those lost in battle.',
+    'images/swordstalker.png'
+),
+
+(
+    18,
+    'Saggi the Dark Clown',
+    'MONSTER',
+    'A mysterious clown whose strange movements make his attacks difficult to predict.',
+    'images/saggi_the_dark_clown.png'
+),
+
+(
+    19,
+    'La Jinn the Mystical Genie of the Lamp',
+    'MONSTER',
+    'A powerful genie bound to a lamp and compelled to serve its master.',
+    'images/la_jinn_the_mystical_genie_of_the_lamp.png'
+),
+
+(
+    20,
+    'Hitotsu-Me Giant',
+    'MONSTER',
+    'A one-eyed giant that overwhelms enemies through sheer physical strength.',
+    'images/hitotsu-me_giant.png'
+),
+
+(
+    21,
+    'Claw Reacher',
+    'MONSTER',
+    'A sinister creature armed with enormous claws used to seize its opponents.',
+    'images/claw_reacher.png'
+),
+
+(
+    22,
+    'Armored Zombie',
+    'MONSTER',
+    'An undead warrior protected by armor that continues fighting despite its decaying body.',
+    'images/armored_zombie.png'
+),
+
+(
+    23,
+    'Battle Steer',
+    'MONSTER',
+    'A powerful beast-warrior whose enormous arms can crush even solid stone.',
+    'images/battle_steer.png'
+),
+
+(
+    24,
+    'Mystic Horseman',
+    'MONSTER',
+    'A creature that is half man and half horse and is renowned for exceptional speed.',
+    'images/mystic_horseman.png'
+),
+
+(
+    25,
+    'Ryu-Kishin Powered',
+    'MONSTER',
+    'A gargoyle empowered by darkness whose sharp talons make it a dangerous opponent.',
+    'images/ryu-kishin_powered.png'
+),
+
+(
+    26,
+    'Aqua Madoor',
+    'MONSTER',
+    'A water magician capable of conjuring powerful magical barriers against enemies.',
+    'images/aqua_madoor.png'
+),
+
+(
+    27,
+    'Mystic Clown',
+    'MONSTER',
+    'A crazed and powerful creature whose relentless assault is difficult to stop.',
+    'images/mystic_clown.png'
+),
+
+(
+    28,
+    'Vorse Raider',
+    'MONSTER',
+    'A vicious beast-warrior known for his brutality and heavily scarred battle axe.',
+    'images/vorse_raider.png'
+);
+
+
+-- ============================================================
+-- MONSTER CARD STATISTICS
 -- ============================================================
 
 INSERT INTO MonsterCard
 (card_id, attribute, monster_type, level, attack, defense)
 VALUES
 
-    (1, 'DARK',  'Spellcaster', 7, 2500, 2100),
+-- Yugi / Player
+(1,  'DARK',  'Spellcaster',    7, 2500, 2100),
+(2,  'EARTH', 'Warrior',        7, 2300, 2100),
+(3,  'DARK',  'Fiend',          6, 2500, 1200),
+(4,  'DARK',  'Dragon',         5, 2000, 1500),
+(5,  'EARTH', 'Warrior',        4, 1400, 1200),
+(6,  'DARK',  'Fiend',          4, 1300, 1400),
+(7,  'EARTH', 'Rock',           3, 1300, 2000),
+(8,  'LIGHT', 'Spellcaster',    4,  800, 2000),
+(9,  'EARTH', 'Beast-Warrior',  4, 1200, 1500),
+(10, 'DARK',  'Dragon',         4, 1500,  800),
+(11, 'LIGHT', 'Spellcaster',    4, 1700, 1000),
+(12, 'EARTH', 'Beast',          3, 1200,  800),
+(13, 'EARTH', 'Beast',          4, 1500, 1200),
+(14, 'EARTH', 'Dinosaur',       3, 1200,  800),
 
-    (2, 'LIGHT', 'Dragon',      8, 3000, 2500),
-
-    (3, 'EARTH', 'Warrior',     4, 1400, 1200),
-
-    (4, 'EARTH', 'Beast-Warrior', 4, 1700, 1000),
-
-    (5, 'EARTH', 'Beast-Warrior', 4, 1200, 1000);
-
-
--- ============================================================
--- DUMMY DECK
--- ============================================================
-
-INSERT INTO Deck
-(deck_id, account_id, deck_name)
-    OVERRIDING SYSTEM VALUE
-VALUES
-    (1, 1, 'Yugi Starter Deck');
-
-
--- ============================================================
--- DUMMY TRUNK
--- Yugi's owned cards.
--- ============================================================
-
-INSERT INTO Trunk
-(trunk_id, account_id, card_id, quantity)
-    OVERRIDING SYSTEM VALUE
-VALUES
-
-    (1, 1, 1, 1),
-
-    (2, 1, 2, 1),
-
-    (3, 1, 3, 3),
-
-    (4, 1, 4, 2),
-
-    (5, 1, 5, 2);
+-- Kaiba / Opponent
+(15, 'LIGHT', 'Dragon',         8, 3000, 2500),
+(16, 'EARTH', 'Warrior',        6, 2200, 1500),
+(17, 'DARK',  'Warrior',        6, 2000, 1600),
+(18, 'DARK',  'Spellcaster',    3,  600, 1500),
+(19, 'DARK',  'Fiend',          4, 1800, 1000),
+(20, 'EARTH', 'Beast-Warrior',  4, 1200, 1000),
+(21, 'DARK',  'Fiend',          3, 1000,  800),
+(22, 'DARK',  'Zombie',         3, 1500,    0),
+(23, 'EARTH', 'Beast-Warrior',  5, 1800, 1300),
+(24, 'EARTH', 'Beast',          4, 1300, 1550),
+(25, 'DARK',  'Fiend',          4, 1600, 1200),
+(26, 'WATER', 'Spellcaster',    4, 1200, 2000),
+(27, 'DARK',  'Fiend',          4, 1500, 1000),
+(28, 'DARK',  'Beast-Warrior',  4, 1900, 1200);
 
 
 -- ============================================================
--- DUMMY DECK CONTENTS
+-- RESET CARD IDENTITY COUNTER
+--
+-- Card IDs 1-28 were inserted explicitly above.
+-- The next automatically generated Card ID must therefore be 29.
 -- ============================================================
 
-INSERT INTO DeckCard
-(deckcard_id, deck_id, card_id, quantity)
-    OVERRIDING SYSTEM VALUE
-VALUES
-
-    (1, 1, 1, 1),
-
-    (2, 1, 3, 2),
-
-    (3, 1, 4, 2);
-
-
--- ============================================================
--- RESET IDENTITY COUNTERS AFTER DUMMY DATA
--- ============================================================
-
-ALTER TABLE account
-    ALTER COLUMN account_id RESTART WITH 3;
-
-ALTER TABLE card
-    ALTER COLUMN card_id RESTART WITH 6;
-
-ALTER TABLE deck
-    ALTER COLUMN deck_id RESTART WITH 2;
-
-ALTER TABLE trunk
-    ALTER COLUMN trunk_id RESTART WITH 6;
-
-ALTER TABLE deckcard
-    ALTER COLUMN deckcard_id RESTART WITH 4;
+ALTER TABLE Card
+    ALTER COLUMN card_id RESTART WITH 29;
 
 
 -- ============================================================

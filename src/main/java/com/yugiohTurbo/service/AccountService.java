@@ -4,18 +4,26 @@ import com.yugiohTurbo.model.Account;
 import com.yugiohTurbo.repository.AccountRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final PlayerSetupService playerSetupService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public AccountService(AccountRepository accountRepository) {
+    public AccountService(
+            AccountRepository accountRepository,
+            PlayerSetupService playerSetupService
+    ) {
+
         this.accountRepository = accountRepository;
+        this.playerSetupService = playerSetupService;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
+    @Transactional
     public boolean createAccount(
             String username,
             String password,
@@ -38,22 +46,36 @@ public class AccountService {
             return false;
         }
 
-        String passwordHash = passwordEncoder.encode(password);
+        String passwordHash =
+                passwordEncoder.encode(password);
 
-        accountRepository.create(username, passwordHash);
+        Integer accountId =
+                accountRepository.create(
+                        username.trim(),
+                        passwordHash
+                );
+
+        playerSetupService.initializeNewPlayer(accountId);
 
         return true;
     }
 
-    public Account login(String username, String password) {
+    public Account login(
+            String username,
+            String password
+    ) {
 
-        Account account = accountRepository.findByUsername(username);
+        Account account =
+                accountRepository.findByUsername(username);
 
         if (account == null) {
             return null;
         }
 
-        if (!passwordEncoder.matches(password, account.passwordHash())) {
+        if (!passwordEncoder.matches(
+                password,
+                account.passwordHash()
+        )) {
             return null;
         }
 
@@ -64,7 +86,10 @@ public class AccountService {
         return accountRepository.findById(accountId);
     }
 
-    public boolean changeUsername(Integer accountId, String newUsername) {
+    public boolean changeUsername(
+            Integer accountId,
+            String newUsername
+    ) {
 
         if (newUsername == null || newUsername.isBlank()) {
             return false;
@@ -76,7 +101,10 @@ public class AccountService {
             return false;
         }
 
-        accountRepository.updateUsername(accountId, newUsername);
+        accountRepository.updateUsername(
+                accountId,
+                newUsername
+        );
 
         return true;
     }
