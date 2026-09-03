@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>Duel - Yu-Gi-Oh! Turbo</title>
+
+  <link
+          rel="stylesheet"
+          th:href="@{/css/duel.css}">
+
+</head>
+
+<body>
+
+
+<div
+        class="duel-start"
+        th:if="${state == null}">
+
+  <h1>Yu-Gi-Oh! Turbo</h1>
+
+  <h2>Duel Kaiba</h2>
+
+  <p>
+    Current Deck:
+    <strong th:text="${deckSize}">
+      40
+    </strong>
+    / 40
+  </p>
+
+  <p
+          class="error"
+          th:if="${error}"
+          th:text="${error}">
+  </p>
+
+  <form
+          action="/duel/start"
+          method="post">
+
+    <button type="submit">
+      Start Duel
+    </button>
+
+  </form>
+
+  <a href="/menu">
+    Back to Menu
+  </a>
+
+</div>
+
+
+<div
+        class="duel-page"
+        th:if="${state != null}">
+
+
+  <!-- ===================================================== -->
+  <!-- PHASE STRIP -->
+  <!-- ===================================================== -->
+
+  <header class="phase-bar">
+
+
+    <div class="turn-number">
+
+      TURN
+
+      <strong
+              th:text="${state.turnNumber}">
+        1
+      </strong>
+
+    </div>
+
+
+    <div class="phase-buttons">
+
+
+      <div
+              class="phase-button"
+              th:classappend="${state.currentPhase == 'DRAW PHASE'}
+                    ? ' active-phase'">
+
+        DP
+
+      </div>
+
+
+      <div
+              class="phase-button"
+              th:classappend="${state.currentPhase == 'STANDBY PHASE'}
+                    ? ' active-phase'">
+
+        SP
+
+      </div>
+
+
+      <div
+              class="phase-button"
+              th:classappend="${state.currentPhase == 'MAIN PHASE 1'}
+                    ? ' active-phase'">
+
+        M1
+
+      </div>
+
+
+      <div
+              class="phase-button"
+              th:classappend="${state.currentPhase == 'BATTLE PHASE'}
+                    ? ' active-phase'">
+
+        BP
+
+      </div>
+
+
+      <div
+              class="phase-button"
+              th:classappend="${state.currentPhase == 'MAIN PHASE 2'}
+                    ? ' active-phase'">
+
+        M2
+
+      </div>
+
+
+      <div
+              class="phase-button"
+              th:classappend="${state.currentPhase == 'END PHASE'}
+                    ? ' active-phase'">
+
+        EP
+
+      </div>
+
+    </div>
+
+
+    <div
+            class="turn-owner"
+            th:text="${state.playerTurn
+                ? 'YOUR TURN'
+                : 'KAIBA TURN'}">
+
+      YOUR TURN
+
+    </div>
+
+  </header>
+
+
+  <div class="duel-layout">
+
+
+    <!-- ================================================= -->
+    <!-- FIELD + HAND -->
+    <!-- ================================================= -->
+
+    <main class="game-area">
+
+
+      <!-- ============================================= -->
+      <!-- KAIBA FIELD -->
+      <!-- ============================================= -->
+
+      <section class="field opponent-field">
+
+
+        <!-- KAIBA LP -->
+
+        <div class="life-point-column">
+
+          <div class="life-point-panel">
+
+                        <span class="duelist-name">
+                            KAIBA
+                        </span>
+
+            <span class="lp-label">
+                            LP
+                        </span>
+
+            <strong
+                    class="lp-value"
+                    th:text="${state.opponentLifePoints}">
+
+              8000
+
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- KAIBA BOARD -->
+
+        <div class="central-field">
+
+
+          <!-- SPELL/TRAP + DECK -->
+
+          <div class="field-card-row">
+
+            <div class="zone-row">
+
+              <div class="zone card-zone">S/T</div>
+              <div class="zone card-zone">S/T</div>
+              <div class="zone card-zone">S/T</div>
+              <div class="zone card-zone">S/T</div>
+              <div class="zone card-zone">S/T</div>
+
+            </div>
+
+
+            <div class="pile-zone">
+
+              <span>DECK</span>
+
+              <strong
+                      th:text="${state.opponentDeck.size()}">
+                35
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="opponent-action-space">
+          </div>
+
+
+          <!-- MONSTERS + GRAVE -->
+
+          <div class="field-card-row">
+
+            <div class="zone-row">
+
+              <div
+                      class="zone card-zone"
+                      th:each="monster : ${state.opponentMonsterZones}">
+
+
+                                <span
+                                        class="empty-zone"
+                                        th:if="${monster == null}">
+                                    M
+                                </span>
+
+
+                <div
+                        class="monster"
+                        th:if="${monster != null}">
+
+
+                  <img
+                          class="field-card card-hover-source"
+
+                          th:classappend="${monster.position.name() == 'DEFENSE'}
+                                            ? ' defense-card'"
+
+                          th:src="${'/' + monster.card.imagePath}"
+
+                          th:alt="${monster.card.name}"
+
+                          th:attr="
+                                            data-name=${monster.card.name},
+                                            data-type=${monster.card.monsterType},
+                                            data-attribute=${monster.card.attribute},
+                                            data-level=${monster.card.level},
+                                            data-attack=${monster.card.attack},
+                                            data-defense=${monster.card.defense},
+                                            data-description=${monster.card.description},
+                                            data-image=${'/' + monster.card.imagePath}">
+
+
+                  <span
+                          class="monster-stats"
+
+                          th:text="${monster.position.name() == 'ATTACK'
+                                            ? 'ATK ' + monster.card.attack
+                                            : 'DEF ' + monster.card.defense}">
+                                    </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="pile-zone">
+
+              <span>GRAVE</span>
+
+              <strong
+                      th:text="${state.opponentGraveyard.size()}">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ============================================= -->
+      <!-- PLAYER FIELD -->
+      <!-- ============================================= -->
+
+      <section class="field player-field">
+
+
+        <!-- PLAYER LP -->
+
+        <div class="life-point-column">
+
+          <div class="life-point-panel">
+
+                        <span class="duelist-name">
+                            YOU
+                        </span>
+
+            <span class="lp-label">
+                            LP
+                        </span>
+
+            <strong
+                    class="lp-value"
+                    th:text="${state.playerLifePoints}">
+
+              8000
+
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- PLAYER BOARD -->
+
+        <div class="central-field">
+
+
+          <!-- MONSTERS + GRAVE -->
+
+          <div class="field-card-row">
+
+            <div class="zone-row">
+
+              <div
+                      class="zone card-zone"
+                      th:each="monster : ${state.playerMonsterZones}">
+
+
+                                <span
+                                        class="empty-zone"
+                                        th:if="${monster == null}">
+                                    M
+                                </span>
+
+
+                <div
+                        class="monster"
+                        th:if="${monster != null}">
+
+
+                  <img
+                          class="field-card card-hover-source"
+
+                          th:classappend="${monster.position.name() == 'DEFENSE'}
+                                            ? ' defense-card'"
+
+                          th:src="${'/' + monster.card.imagePath}"
+
+                          th:alt="${monster.card.name}"
+
+                          th:attr="
+                                            data-name=${monster.card.name},
+                                            data-type=${monster.card.monsterType},
+                                            data-attribute=${monster.card.attribute},
+                                            data-level=${monster.card.level},
+                                            data-attack=${monster.card.attack},
+                                            data-defense=${monster.card.defense},
+                                            data-description=${monster.card.description},
+                                            data-image=${'/' + monster.card.imagePath}">
+
+
+                  <span
+                          class="monster-stats"
+
+                          th:text="${monster.position.name() == 'ATTACK'
+                                            ? 'ATK ' + monster.card.attack
+                                            : 'DEF ' + monster.card.defense}">
+                                    </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="pile-zone">
+
+              <span>GRAVE</span>
+
+              <strong
+                      th:text="${state.playerGraveyard.size()}">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- ATTACK CONTROLS -->
+
+          <div class="field-card-row">
+
+            <div class="action-row">
+
+              <div
+                      class="action-slot"
+                      th:each="monster, stat : ${state.playerMonsterZones}">
+
+
+                <form
+                        th:if="${monster != null
+                                        and state.playerTurn
+                                        and state.currentPhase == 'BATTLE PHASE'
+                                        and !state.finished
+                                        and monster.position.name() == 'ATTACK'
+                                        and !monster.attacked}"
+
+                        action="/duel/attack"
+                        method="post">
+
+
+                  <input
+                          type="hidden"
+                          name="attackerZone"
+                          th:value="${stat.index}">
+
+
+                  <select
+                          name="targetZone"
+                          th:if="${state.hasOpponentMonsters()}">
+
+
+                    <option
+                            th:each="target, targetStat : ${state.opponentMonsterZones}"
+
+                            th:if="${target != null}"
+
+                            th:value="${targetStat.index}"
+
+                            th:text="${target.card.name}">
+                    </option>
+
+                  </select>
+
+
+                  <input
+                          th:if="${!state.hasOpponentMonsters()}"
+
+                          type="hidden"
+
+                          name="targetZone"
+
+                          value="-1">
+
+
+                  <button type="submit">
+                    Attack
+                  </button>
+
+                </form>
+
+              </div>
+
+            </div>
+
+
+            <div class="pile-placeholder">
+            </div>
+
+          </div>
+
+
+          <!-- SPELL/TRAP + DECK -->
+
+          <div class="field-card-row">
+
+            <div class="zone-row">
+
+              <div class="zone card-zone">S/T</div>
+              <div class="zone card-zone">S/T</div>
+              <div class="zone card-zone">S/T</div>
+              <div class="zone card-zone">S/T</div>
+              <div class="zone card-zone">S/T</div>
+
+            </div>
+
+
+            <div class="pile-zone">
+
+              <span>DECK</span>
+
+              <strong
+                      th:text="${state.playerDeck.size()}">
+                35
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ============================================= -->
+      <!-- HAND -->
+      <!-- ============================================= -->
+
+      <section
+              class="hand-section"
+              th:if="${!state.finished}">
+
+
+        <h2>
+          Your Hand
+        </h2>
+
+
+        <div class="hand">
+
+
+          <div
+                  class="hand-card"
+                  th:each="card : ${state.playerHand}">
+
+
+            <img
+                    class="card-hover-source"
+
+                    th:src="${'/' + card.imagePath}"
+
+                    th:alt="${card.name}"
+
+                    th:attr="
+                                data-name=${card.name},
+                                data-type=${card.monsterType},
+                                data-attribute=${card.attribute},
+                                data-level=${card.level},
+                                data-attack=${card.attack},
+                                data-defense=${card.defense},
+                                data-description=${card.description},
+                                data-image=${'/' + card.imagePath}">
+
+
+            <strong
+                    th:text="${card.name}">
+              Card
+            </strong>
+
+
+            <span>
+
+                            LV
+                            <span th:text="${card.level}">
+                            </span>
+
+                            |
+
+                            ATK
+                            <span th:text="${card.attack}">
+                            </span>
+
+                            |
+
+                            DEF
+                            <span th:text="${card.defense}">
+                            </span>
+
+                        </span>
+
+
+            <div
+                    class="summon-controls"
+
+                    th:if="${state.playerTurn
+                                and !state.playerSummoned
+                                and (state.currentPhase == 'MAIN PHASE 1'
+                                or state.currentPhase == 'MAIN PHASE 2')}">
+
+
+              <!-- ATTACK SUMMON -->
+
+              <form
+                      action="/duel/summon"
+                      method="post">
+
+
+                <input
+                        type="hidden"
+                        name="cardId"
+                        th:value="${card.cardId}">
+
+
+                <input
+                        type="hidden"
+                        name="position"
+                        value="ATTACK">
+
+
+                <div
+                        class="tribute-selection"
+                        th:if="${card.level > 4}">
+
+
+                  <strong
+                          th:text="${card.level <= 6
+                                            ? 'Choose 1 Tribute'
+                                            : 'Choose 2 Tributes'}">
+                  </strong>
+
+
+                  <label
+                          th:each="fieldMonster, zoneStat : ${state.playerMonsterZones}"
+
+                          th:if="${fieldMonster != null}">
+
+
+                    <input
+                            type="checkbox"
+
+                            name="tributeZones"
+
+                            th:value="${zoneStat.index}">
+
+
+                    <span
+                            th:text="${fieldMonster.card.name}">
+                                        </span>
+
+                  </label>
+
+                </div>
+
+
+                <button type="submit">
+                  Summon ATK
+                </button>
+
+              </form>
+
+
+              <!-- DEFENSE SUMMON -->
+
+              <form
+                      action="/duel/summon"
+                      method="post">
+
+
+                <input
+                        type="hidden"
+                        name="cardId"
+                        th:value="${card.cardId}">
+
+
+                <input
+                        type="hidden"
+                        name="position"
+                        value="DEFENSE">
+
+
+                <div
+                        class="tribute-selection"
+                        th:if="${card.level > 4}">
+
+
+                  <strong
+                          th:text="${card.level <= 6
+                                            ? 'Choose 1 Tribute'
+                                            : 'Choose 2 Tributes'}">
+                  </strong>
+
+
+                  <label
+                          th:each="fieldMonster, zoneStat : ${state.playerMonsterZones}"
+
+                          th:if="${fieldMonster != null}">
+
+
+                    <input
+                            type="checkbox"
+
+                            name="tributeZones"
+
+                            th:value="${zoneStat.index}">
+
+
+                    <span
+                            th:text="${fieldMonster.card.name}">
+                                        </span>
+
+                  </label>
+
+                </div>
+
+
+                <button
+                        type="submit"
+                        class="defense-button">
+
+                  Summon DEF
+
+                </button>
+
+              </form>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- ================================================= -->
+    <!-- SIDEBAR -->
+    <!-- ================================================= -->
+
+    <aside class="duel-sidebar">
+
+
+      <!-- PHASE / TURN CONTROLS -->
+
+      <div class="turn-controls">
+
+
+        <form
+                th:if="${state.playerTurn
+                        and state.turnNumber > 1
+                        and state.currentPhase == 'MAIN PHASE 1'
+                        and !state.finished}"
+
+                action="/duel/battle-phase"
+
+                method="post">
+
+
+          <button
+                  type="submit"
+                  class="battle-phase-button">
+
+            Enter Battle Phase
+
+          </button>
+
+        </form>
+
+
+        <form
+                th:if="${state.playerTurn
+                        and state.currentPhase == 'BATTLE PHASE'
+                        and !state.finished}"
+
+                action="/duel/main-phase-2"
+
+                method="post">
+
+
+          <button
+                  type="submit"
+                  class="main-two-button">
+
+            Enter Main Phase 2
+
+          </button>
+
+        </form>
+
+
+        <form
+                th:if="${state.playerTurn
+                        and !state.finished}"
+
+                action="/duel/end-turn"
+
+                method="post">
+
+
+          <button
+                  type="submit"
+                  class="end-turn-button">
+
+            End Turn
+
+          </button>
+
+        </form>
+
+
+        <form
+                action="/duel/leave"
+                method="post">
+
+
+          <button
+                  type="submit"
+                  class="leave-button">
+
+            Leave Duel
+
+          </button>
+
+        </form>
+
+      </div>
+
+
+      <!-- CARD INFO -->
+
+      <section class="card-info-panel">
+
+
+        <h3>
+          Card Information
+        </h3>
+
+
+        <div
+                class="card-info-empty"
+                id="card-info-empty">
+
+          Hover over a card
+
+        </div>
+
+
+        <div
+                class="card-info-content"
+                id="card-info-content">
+
+
+          <img
+                  id="info-image"
+                  alt="Selected card">
+
+
+          <h4 id="info-name">
+            Card
+          </h4>
+
+          <p id="info-type"></p>
+
+          <p id="info-attribute"></p>
+
+          <p id="info-level"></p>
+
+          <p id="info-stats"></p>
+
+          <p
+                  class="info-description"
+                  id="info-description">
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- BATTLE LOG -->
+
+      <section class="battle-log">
+
+
+        <h3>
+          Battle Log
+        </h3>
+
+
+        <div class="log-content">
+
+
+          <p
+                  th:each="message : ${state.battleLog}"
+
+                  th:text="${message}">
+          </p>
+
+        </div>
+
+      </section>
+
+    </aside>
+
+  </div>
+
+</div>
+
+
+<script th:src="@{/js/duel.js}">
+</script>
+
+
+</body>
+
+</html>
