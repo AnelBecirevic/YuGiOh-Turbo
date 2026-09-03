@@ -25,19 +25,41 @@ public class DeckEditorService {
     }
 
     public Integer getDeckId(Integer accountId) {
-        return deckRepository.findDeckIdByAccountId(accountId);
+
+        return deckRepository
+                .findDeckIdByAccountId(
+                        accountId
+                );
     }
 
-    public List<TrunkCard> getTrunkCards(Integer accountId) {
-        return trunkRepository.findAllByAccountId(accountId);
+    public List<TrunkCard> getTrunkCards(
+            Integer accountId
+    ) {
+
+        return trunkRepository
+                .findAvailableByAccountId(
+                        accountId
+                );
     }
 
-    public List<TrunkCard> getDeckCards(Integer deckId) {
-        return deckRepository.findCardsByDeckId(deckId);
+    public List<TrunkCard> getDeckCards(
+            Integer deckId
+    ) {
+
+        return deckRepository
+                .findCardsByDeckId(
+                        deckId
+                );
     }
 
-    public int getDeckSize(Integer deckId) {
-        return deckRepository.getDeckSize(deckId);
+    public int getDeckSize(
+            Integer deckId
+    ) {
+
+        return deckRepository
+                .getDeckSize(
+                        deckId
+                );
     }
 
     @Transactional
@@ -47,31 +69,50 @@ public class DeckEditorService {
     ) {
 
         Integer deckId =
-                deckRepository.findDeckIdByAccountId(accountId);
+                deckRepository
+                        .findDeckIdByAccountId(
+                                accountId
+                        );
 
         if (deckId == null) {
             return;
         }
 
         int deckSize =
-                deckRepository.getDeckSize(deckId);
+                deckRepository
+                        .getDeckSize(
+                                deckId
+                        );
 
         if (deckSize >= MAX_DECK_SIZE) {
             return;
         }
 
+        /*
+         * This is TOTAL ownership.
+         */
         Integer ownedQuantity =
-                trunkRepository.getCardQuantity(
-                        accountId,
-                        cardId
-                );
+                trunkRepository
+                        .getCardQuantity(
+                                accountId,
+                                cardId
+                        );
 
+        /*
+         * This is how many copies are currently
+         * inside the deck.
+         */
         Integer deckQuantity =
-                deckRepository.getCardQuantity(
-                        deckId,
-                        cardId
-                );
+                deckRepository
+                        .getCardQuantity(
+                                deckId,
+                                cardId
+                        );
 
+        /*
+         * Prevent the deck from containing more copies
+         * than the player actually owns.
+         */
         if (ownedQuantity <= deckQuantity) {
             return;
         }
@@ -89,17 +130,21 @@ public class DeckEditorService {
     ) {
 
         Integer deckId =
-                deckRepository.findDeckIdByAccountId(accountId);
+                deckRepository
+                        .findDeckIdByAccountId(
+                                accountId
+                        );
 
         if (deckId == null) {
             return;
         }
 
         Integer deckQuantity =
-                deckRepository.getCardQuantity(
-                        deckId,
-                        cardId
-                );
+                deckRepository
+                        .getCardQuantity(
+                                deckId,
+                                cardId
+                        );
 
         if (deckQuantity <= 0) {
             return;

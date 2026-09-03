@@ -1,0 +1,824 @@
+body {
+    margin: 0;
+
+    background: #1d1d1d;
+
+    font-family: Arial, sans-serif;
+
+    color: white;
+}
+
+
+/* ============================================================
+   START SCREEN
+   ============================================================ */
+
+.duel-start {
+    width: 420px;
+
+    margin: 120px auto;
+
+    padding: 40px;
+
+    background: #eeeeee;
+
+    color: #222;
+
+    text-align: center;
+
+    border-radius: 8px;
+
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.duel-start button {
+    padding: 12px 30px;
+
+    border: none;
+
+    border-radius: 5px;
+
+    background: #444;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.duel-start a {
+    display: block;
+
+    margin-top: 20px;
+
+    color: #444;
+}
+
+
+/* ============================================================
+   PAGE
+   ============================================================ */
+
+.duel-page {
+    width: 98%;
+
+    max-width: 1650px;
+
+    margin: 10px auto 30px;
+}
+
+
+/* ============================================================
+   PHASE STRIP
+   ============================================================ */
+
+.phase-bar {
+    min-height: 58px;
+
+    box-sizing: border-box;
+
+    margin-bottom: 10px;
+
+    padding: 7px 15px;
+
+    background: #292929;
+
+    border: 2px solid #666;
+
+    border-radius: 7px;
+
+    display: grid;
+
+    grid-template-columns:
+        130px 1fr 130px;
+
+    align-items: center;
+
+    box-shadow:
+            0 0 8px rgba(0, 0, 0, 0.45);
+}
+
+.turn-number,
+.turn-owner {
+    font-size: 13px;
+
+    font-weight: bold;
+}
+
+.turn-owner {
+    text-align: right;
+}
+
+.phase-buttons {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 5px;
+}
+
+.phase-button {
+    width: 48px;
+
+    height: 32px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #3b3b3b;
+
+    border: 2px solid #666;
+
+    border-radius: 4px;
+
+    color: #999;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.active-phase {
+    background: #eeeeee;
+
+    border-color: #bbbbbb;
+
+    color: #222;
+
+    box-shadow:
+            0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+
+/* ============================================================
+   PAGE LAYOUT
+   ============================================================ */
+
+.duel-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr) 290px;
+
+    gap: 12px;
+
+    align-items: start;
+}
+
+.game-area {
+    min-width: 0;
+}
+
+
+/* ============================================================
+   FIELD
+   ============================================================ */
+
+.field {
+    display: grid;
+
+    grid-template-columns:
+        115px minmax(0, 1fr);
+
+    gap: 8px;
+
+    padding: 10px;
+
+    margin-bottom: 8px;
+
+    background: #4b4b4b;
+
+    border-radius: 7px;
+
+    box-shadow:
+            0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.opponent-field {
+    border-top: 3px solid #8f3333;
+}
+
+.player-field {
+    border-bottom: 3px solid #33598f;
+}
+
+.central-field {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+
+/* ============================================================
+   ROWS
+   ============================================================ */
+
+.field-card-row {
+    display: grid;
+
+    grid-template-columns:
+        auto 74px;
+
+    gap: 7px;
+
+    justify-content: center;
+
+    align-items: center;
+}
+
+
+/* ============================================================
+   CARD ZONES
+   ============================================================ */
+
+.zone-row,
+.action-row {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 90px);
+
+    gap: 7px;
+}
+
+.card-zone {
+    width: 90px;
+
+    height: 125px;
+
+    box-sizing: border-box;
+
+    border: 2px solid #777;
+
+    background: rgba(0, 0, 0, 0.22);
+
+    border-radius: 4px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #888;
+
+    font-size: 17px;
+
+    font-weight: bold;
+}
+
+.empty-zone {
+    color: #888;
+
+    font-size: 17px;
+
+    font-weight: bold;
+}
+
+
+/* ============================================================
+   ACTION ROW
+   ============================================================ */
+
+.action-row {
+    min-height: 42px;
+}
+
+.action-slot {
+    width: 90px;
+
+    min-height: 40px;
+}
+
+.action-slot form {
+    width: 100%;
+
+    margin: 0;
+}
+
+.action-slot select {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    margin-bottom: 2px;
+
+    padding: 2px;
+
+    font-size: 9px;
+}
+
+.action-slot button {
+    width: 100%;
+
+    padding: 4px;
+
+    border: none;
+
+    border-radius: 3px;
+
+    cursor: pointer;
+
+    font-size: 10px;
+}
+
+.opponent-action-space {
+    height: 15px;
+}
+
+.pile-placeholder {
+    width: 74px;
+}
+
+
+/* ============================================================
+   FIELD CARDS
+   ============================================================ */
+
+.monster {
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 3px;
+}
+
+.field-card {
+    width: 58px;
+
+    max-height: 84px;
+
+    object-fit: contain;
+
+    transition: transform 0.15s;
+}
+
+.field-card:hover {
+    transform: scale(1.8);
+
+    z-index: 20;
+}
+
+.field-card.defense-card {
+    transform:
+            rotate(90deg)
+            scale(0.78);
+}
+
+.field-card.defense-card:hover {
+    transform:
+            rotate(90deg)
+            scale(1.45);
+
+    z-index: 20;
+}
+
+.monster-stats {
+    font-size: 10px;
+
+    font-weight: bold;
+
+    color: white;
+}
+
+
+/* ============================================================
+   DECK / GRAVEYARD
+   ============================================================ */
+
+.pile-zone {
+    width: 74px;
+
+    height: 92px;
+
+    box-sizing: border-box;
+
+    border: 2px solid #777;
+
+    background: #292929;
+
+    border-radius: 4px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    font-size: 10px;
+}
+
+.pile-zone strong {
+    font-size: 19px;
+}
+
+
+/* ============================================================
+   LIFE POINTS
+   ============================================================ */
+
+.life-point-column {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.life-point-panel {
+    width: 105px;
+
+    min-height: 115px;
+
+    box-sizing: border-box;
+
+    padding: 10px 5px;
+
+    background: #292929;
+
+    border: 3px solid #888;
+
+    border-radius: 7px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 4px;
+
+    text-align: center;
+
+    box-shadow:
+            0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.duelist-name {
+    font-size: 15px;
+
+    font-weight: bold;
+}
+
+.lp-label {
+    font-size: 12px;
+
+    color: #bbbbbb;
+}
+
+.lp-value {
+    font-size: 30px;
+
+    line-height: 1;
+
+    letter-spacing: 1px;
+}
+
+
+/* ============================================================
+   HAND
+   ============================================================ */
+
+.hand-section {
+    margin-top: 8px;
+
+    padding: 10px;
+
+    background: #333;
+
+    border-radius: 7px;
+}
+
+.hand-section h2 {
+    margin: 0 0 8px;
+
+    font-size: 18px;
+}
+
+.hand {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.hand-card {
+    width: 125px;
+
+    padding: 7px;
+
+    background: #eeeeee;
+
+    color: #222;
+
+    border-radius: 4px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    font-size: 10px;
+}
+
+.hand-card img {
+    width: 100%;
+
+    cursor: pointer;
+}
+
+.hand-card strong {
+    font-size: 11px;
+}
+
+
+/* ============================================================
+   SUMMON CONTROLS
+   ============================================================ */
+
+.summon-controls {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.summon-controls form {
+    margin: 0;
+
+    padding-top: 4px;
+
+    border-top: 1px solid #bbb;
+}
+
+.summon-controls button {
+    width: 100%;
+
+    padding: 6px 3px;
+
+    border: none;
+
+    border-radius: 3px;
+
+    background: #444;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.defense-button {
+    background: #315273 !important;
+}
+
+
+/* ============================================================
+   TRIBUTES
+   ============================================================ */
+
+.tribute-selection {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    padding: 4px;
+
+    margin-bottom: 4px;
+
+    background: #dddddd;
+
+    border-radius: 3px;
+}
+
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+
+.duel-sidebar {
+    position: sticky;
+
+    top: 10px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+/* ============================================================
+   PHASE / TURN CONTROLS
+   ============================================================ */
+
+.turn-controls {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.turn-controls form {
+    margin: 0;
+}
+
+.turn-controls button {
+    width: 100%;
+
+    padding: 11px;
+
+    border: none;
+
+    border-radius: 5px;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.battle-phase-button {
+    background: #755a24;
+}
+
+.main-two-button {
+    background: #495779;
+}
+
+.end-turn-button {
+    background: #315b36;
+}
+
+.leave-button {
+    background: #7d3030;
+}
+
+
+/* ============================================================
+   CARD INFORMATION
+   ============================================================ */
+
+.card-info-panel {
+    min-height: 330px;
+
+    box-sizing: border-box;
+
+    padding: 12px;
+
+    background: #292929;
+
+    border: 2px solid #777;
+
+    border-radius: 7px;
+
+    color: white;
+
+    box-shadow:
+            0 0 9px rgba(0, 0, 0, 0.45);
+}
+
+.card-info-panel h3 {
+    margin: 0 0 10px;
+
+    padding-bottom: 7px;
+
+    border-bottom: 1px solid #666;
+
+    font-size: 16px;
+}
+
+.card-info-empty {
+    padding-top: 110px;
+
+    color: #999;
+
+    text-align: center;
+}
+
+.card-info-content {
+    display: none;
+}
+
+.card-info-content.active {
+    display: block;
+}
+
+.card-info-content img {
+    display: block;
+
+    width: 125px;
+
+    margin: 0 auto 9px;
+
+    border: 2px solid #666;
+}
+
+.card-info-content h4 {
+    margin: 6px 0 8px;
+
+    font-size: 16px;
+}
+
+.card-info-content p {
+    margin: 4px 0;
+
+    font-size: 11px;
+}
+
+.info-description {
+    margin-top: 9px !important;
+
+    padding-top: 8px;
+
+    border-top: 1px solid #666;
+
+    line-height: 1.4;
+}
+
+
+/* ============================================================
+   BATTLE LOG
+   ============================================================ */
+
+.battle-log {
+    padding: 10px;
+
+    background: #eeeeee;
+
+    color: #222;
+
+    border: 2px solid #777;
+
+    border-radius: 7px;
+
+    box-shadow:
+            0 0 9px rgba(0, 0, 0, 0.35);
+}
+
+.battle-log h3 {
+    margin: 0 0 7px;
+
+    font-size: 15px;
+}
+
+.log-content {
+    height: 145px;
+
+    overflow-y: auto;
+
+    padding-right: 4px;
+}
+
+.log-content p {
+    margin: 3px 0;
+
+    padding-bottom: 3px;
+
+    border-bottom: 1px solid #ddd;
+
+    font-size: 10px;
+
+    line-height: 1.3;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1200px) {
+
+    .duel-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .duel-sidebar {
+        position: static;
+    }
+}
